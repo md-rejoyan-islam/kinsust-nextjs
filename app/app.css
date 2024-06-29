@@ -1,0 +1,47 @@
+/*  card animation  */
+.kin-wing-card::before,
+.kin-wing-card::after {
+  position: absolute;
+  content: "";
+  width: 0%;
+  height: 0%;
+  opacity: 0;
+  transition: width 0.2s 0.15s linear, height 0.15s linear, opacity 0s 0.35s;
+}
+.kin-wing-card {
+  position: relative;
+  padding-top: 2px;
+  border-radius: 6px;
+}
+
+.kin-wing-card::before {
+  top: 0;
+  right: 0;
+  border-top: 2px solid #9bbcdfb0;
+  border-left: 2px solid #9bbcdfb0;
+}
+.kin-wing-card::after {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid #9bbcdfb0;
+  border-right: 2px solid #9bbcdfb0;
+  border-radius: 5px;
+}
+.kin-wing-card:hover::before,
+.kin-wing-card:hover::after {
+  width: 100%;
+  height: 99.5%;
+  opacity: 1;
+  border-radius: 5px;
+  transition: width 0.2s linear, height 0.15s 0.2s linear, opacity 0s;
+}
+/* end card animation  */
+
+/* footer section  start */
+footer .social-icons a:hover svg {
+  fill: #223db7;
+}
+footer .social-icons a:hover {
+  box-shadow: 0px 1px 10px 0px #223db7;
+}
+/* footer section end  */

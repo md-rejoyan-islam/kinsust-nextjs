@@ -1,7 +1,13 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Hind_Siliguri } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+import "./globals.css";
+import "./app.css";
+import Footer from "./components/shared/footer/Footer";
+
+const hindSiliguri = Hind_Siliguri({
+  subsets: ["bengali"],
+  weight: ["300", "400", "500", "600", "700"],
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -10,8 +16,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" data-theme="light">
+      <body className={hindSiliguri.className}>
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
