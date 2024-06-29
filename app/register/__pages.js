@@ -76,7 +76,7 @@ export default function Register() {
       return;
     }
     error && toast.error(error);
-  }, [message, error, dispatch, router]);
+  }, [message, error, dispatch, router, inputs.email]);
   if (blogs.length > 0) {
     if (!user) {
       return (

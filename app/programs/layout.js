@@ -7,7 +7,7 @@ export const metadata = {
   openGraph: {
     title: "KIN Programs",
     description: "KIN Programs Description",
-    url: `${SiteURL}/programs`,
+    url: `${process.env.SITE_URL}/programs`,
     type: "website",
     siteName: "KIN,A Voluntary Organization",
     locale: "bn_BD",

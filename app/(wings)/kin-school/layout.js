@@ -9,7 +9,7 @@ export const metadata = {
     title: "KIN School",
     description:
       "Nurturing underprivileged children through education, health programs, and moral development. You can join us in making a difference!",
-    url: `${SiteURL}/kin-school`,
+    url: `${process.env.SITE_URL}/kin-school`,
     type: "website",
     siteName: "KIN,A Voluntary Organization",
     locale: "bn_BD",

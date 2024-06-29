@@ -9,7 +9,7 @@ export const metadata = {
     title: "KIN Winter Cloth Distribution",
     description:
       "Bringing warmth and smiles to the less fortunate during the cold season. Join us in making a difference.",
-    url: `${SiteURL}/wings/winter-cloth-distribution`,
+    url: `${process.env.SITE_URL}/wings/winter-cloth-distribution`,
     type: "website",
     siteName: "KIN,A Voluntary Organization",
     locale: "bn_BD",

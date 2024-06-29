@@ -1,15 +1,13 @@
-import { SiteURL } from "@/components/api/Api";
-
 // meta data
 export const metadata = {
-  metadataBase: new URL(SiteURL),
+  metadataBase: new URL(process.env.SITE_URL),
   title: "Register",
   description: "Register description",
 
   openGraph: {
     title: "Register",
     description: "KIN School Description",
-    url: `${SiteURL}/register`,
+    url: `${process.env.SITE_URL}/register`,
     type: "website",
     siteName: "KIN,A Voluntary Organization",
     locale: "bn_BD",

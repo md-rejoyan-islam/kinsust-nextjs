@@ -7,7 +7,7 @@ export const metadata = {
 
   openGraph: {
     title: "KIN Social Awareness",
-    url: `${SiteURL}/social-awareness`,
+    url: `${process.env.SITE_URL}/social-awareness`,
     description:
       "KRaising awareness through programs and protests. Join our mission for justice and a more aware society.",
     type: "website",

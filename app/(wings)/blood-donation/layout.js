@@ -9,7 +9,7 @@ export const metadata = {
     title: "KIN Blood",
     description:
       "A lifeline through efficient blood management and donation. Join us in safeguarding lives and securing a sustainable blood supply.",
-    url: `${SiteURL}/blood-donation`,
+    url: `${process.env.SITE_URL}/blood-donation`,
     type: "website",
     siteName: "KIN,A Voluntary Organization",
     locale: "bn_BD",

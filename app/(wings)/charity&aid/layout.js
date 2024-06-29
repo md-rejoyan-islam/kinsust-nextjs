@@ -9,7 +9,7 @@ export const metadata = {
     title: "KIN Charity & Aid",
     description:
       "Making a difference through events like Charity Film Fest, Poster, T-shirt, and more. Join us in our mission of giving back.",
-    url: `${SiteURL}/charity&aid`,
+    url: `${process.env.SITE_URL}/charity&aid`,
     type: "website",
     siteName: "KIN,A Voluntary Organization",
     locale: "bn_BD",
