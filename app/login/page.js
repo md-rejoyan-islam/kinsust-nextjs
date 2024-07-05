@@ -1,16 +1,37 @@
 "use client";
 import Link from "next/link";
-import PasswordShowHide from "../components/login/PasswordShowHide";
+import PasswordShowHide from "../../components/login/PasswordShowHide";
+import { useAuthLoginMutation } from "@/lib/feature/auth/authApi";
+import { redirect, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
-export default function _page() {
-  const handleSubmit = (e) => {
+export default function Login() {
+  const [userLogin] = useAuthLoginMutation();
+
+  const { user } = useSelector((state) => state.loggedInUser);
+  const router = useRouter();
+
+  // redict to home page if user is already logged in
+  if (user) {
+    redirect(`/profile`);
+    // router.push("/profile");
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const formData = new FormData(e.target);
 
     const data = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    console.log(data);
+
+    // const payload = await userLogin(data);
+    // if (payload?.data?.success) {
+    //   toast.success("Login Successfully!");
+    // } else if (payload?.error?.status === 400) {
+    //   toast.error(payload.error.data.error.message);
+    // }
   };
 
   return (
@@ -48,7 +69,8 @@ export default function _page() {
             <div className="text-sm flex justify-between">
               <Link
                 className="z-10 block text-[17px] text-red-400 hover:text-red-600 dark:text-red-400"
-                href={"/find-account"}
+                // href={"/find-account"}
+                href={"/#"}
               >
                 Forgot Password?
               </Link>
@@ -63,7 +85,8 @@ export default function _page() {
             <div className="mt-4 flex justify-center mb-6  text-zinc-500 dark:text-zinc-300">
               Active your account ? &nbsp;
               <Link
-                href={"/find-account"}
+                href={"#"}
+                // href={"/find-account"}
                 className="z-10 text-blue-600 font-semibold dark:text-blue-600 hover:text-violet-600 px-2 "
               >
                 Click Here

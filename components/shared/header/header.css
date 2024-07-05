@@ -1,0 +1,114 @@
+.navbar {
+  height: 65px;
+}
+.navbar .navbar-start ul li ul.vertical-child-1 {
+  display: none;
+}
+.navbar .navbar-start ul li ul.vertical-child-2 {
+  display: none;
+}
+.navbar .navbar-start ul li a {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+}
+.navbar .navbar-start ul #menu-toggle-1:checked ~ .vertical-child-1 {
+  display: block;
+}
+.navbar .navbar-start ul #menu-toggle-2:checked ~ .vertical-child-2 {
+  display: block;
+}
+.navbar .navbar-center {
+  height: 100%;
+}
+.navbar .navbar-center ul {
+  height: 100%;
+}
+.navbar .navbar-center ul li {
+  display: flex;
+  justify-content: center;
+}
+.navbar .navbar-center ul li ul {
+  position: absolute;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  top: 65.5px;
+}
+.navbar .navbar-center ul li ul li {
+  border-bottom: 1px solid #e2dddd;
+}
+.navbar .navbar-center ul li ul li a {
+  border-radius: 0 !important;
+}
+.dark .navbar .navbar-center ul li ul li {
+  border-bottom: 1px solid #252442;
+}
+.dark .navbar .navbar-center ul li ul li a {
+  border-radius: 0 !important;
+}
+.navbar .navbar-center ul li ul::before {
+  display: none;
+}
+.navbar .navbar-center ul li .drop-child-1 {
+  display: none;
+  left: -3px;
+}
+.navbar .navbar-center ul li .drop-child-1 :hover {
+  border-radius: 0px;
+}
+.navbar .navbar-center ul li .drop-child-2 {
+  display: none;
+  position: absolute;
+  left: -3px;
+}
+.navbar .navbar-center ul li .drop-child-2 :hover {
+  border-radius: 0px !important;
+}
+.navbar .navbar-center ul :hover .drop-child-1 {
+  display: block;
+}
+.navbar .navbar-center ul :hover .drop-child-2 {
+  display: block;
+}
+.active {
+  color: white !important;
+  border-radius: 4px !important;
+  background-color: #3b3b5f !important;
+}
+.dark .active {
+  background-color: #c0bdca 20 !important;
+}
+li a,
+li span {
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px !important;
+  color: black;
+  font-size: 16px;
+  font-weight: 600;
+}
+li :hover {
+  border-radius: 4px;
+}
+.dark li:hover > a {
+  background-color: #c0bdca 20;
+  border-radius: 4px;
+}
+li:hover > a {
+  background-color: #3b3b5f;
+  color: white;
+  border-radius: 4px;
+}
+.dark span {
+  color: #f3f6f9;
+}
+.dark a {
+  color: #f3f6f9;
+}
+.dropdown ul .vertical-child-1 {
+  display: none;
+}

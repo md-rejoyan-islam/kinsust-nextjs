@@ -4,10 +4,11 @@
 
 body {
   height: max-content !important;
+  background-color: #fff;
 }
 
-.dark {
-  background-color: #0b1829 !important;
+.dark body {
+  background-color: #111827 !important;
 }
 
 @font-face {
@@ -22,7 +23,7 @@ body {
   }
 
   .custom-style-menu-a {
-    @apply hover:bg-[#3b3b5f] hover:text-white  dark:hover:text-white   dark:hover:bg-[#c0bdca20];
+    @apply hover:bg-[#3b3b5f] text-nowrap hover:text-white  dark:hover:text-white   dark:hover:bg-[#c0bdca20];
   }
 
   /* faq page */
@@ -30,10 +31,10 @@ body {
     @apply collapse collapse-arrow rounded-lg border-zinc-300 border dark:border-[#22176b]  m-auto;
   }
   .faq-wrapper {
-    @apply sm:text-xl border overflow-hidden   font-bold dark:bg-[#182c49]  border-b dark:border-none  pb-0 bg-[#ebeeffa1] dark:text-white;
+    @apply sm:text-xl border overflow-hidden   font-bold dark:bg-[#182c49]  border-b dark:border-none  pb-0 bg-zinc-200/20 dark:text-white;
   }
   .faq-collapse-container {
-    @apply overflow-hidden box-border  bg-[#fdfdfd] dark:text-[#b4bcc8] dark:bg-[#ebeeff0f] pb-0;
+    @apply overflow-hidden box-border  bg-[#fdfdfd] dark:text-[#b4bcc8] dark:bg-blue-400/5 pb-0;
   }
   .faq-collapse-container p {
     @apply pt-3 text-[16px];

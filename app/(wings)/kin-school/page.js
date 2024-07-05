@@ -1,4 +1,4 @@
-import PhotoPreview from "@/app/components/PhotoPreview";
+import PhotoPreview from "@/components/PhotoPreview";
 import Image from "next/image";
 
 export default function KinSChool() {
