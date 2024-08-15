@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import "./program.css";
 import Pagination from "../../components/pagination/Pagination";
 import Loading from "@/components/Loading";
+import { GlowCapture } from "@codaworks/react-glow";
 
 export default function Programs() {
   const [page, setPage] = useState(1);
@@ -35,31 +36,33 @@ export default function Programs() {
     return <Loading />;
   }
   return (
-    <section className=" bg-[#f9fafc]  min-h-screen dark:bg-[#0f1e3329]   pb-8">
+    <section className=" bg-[#fcf9fe]    theme-dark    min-h-screen overflow-hidden py-8">
       <div className="pt-10 pb-6 px-5 xl:w-[1200px]  lg:m-auto ">
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 justify-items-center  grid-cols-1 overflow-hidden box-border ">
-          {programs?.map((program, index) => {
-            const title = program?.title.replace(
-              "KIN",
-              '<font color="#dc2626" style=font-family:"Arial Black"> KIN </font>'
-            );
+        <GlowCapture>
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 justify-items-center  grid-cols-1 overflow-hidden box-border ">
+            {programs?.map((program, index) => {
+              const title = program?.title.replace(
+                "KIN",
+                '<font color="#dc2626" style=font-family:"Arial Black"> KIN </font>'
+              );
 
-            return (
-              <ProgramCard
-                program={program}
-                key={program?.id}
-                title={title}
-                index={index}
-              />
-            );
-          })}
-        </div>
+              return (
+                <ProgramCard
+                  program={program}
+                  key={program?.id}
+                  title={title}
+                  index={index}
+                />
+              );
+            })}
+          </div>
+        </GlowCapture>
         {/* if no data found  */}
         {programs.length === 0 && (
           <div>
-            <h1 className="text-center px-4 text-black dark:text-white">
-              No Data Found!
-            </h1>
+            <h2 className=" text-center md:mt-5 mt-3 mb-5 text-[#fc535a] xl:text-4xl lg:text-3xl  sm:text-2xl text-xl font-bold">
+              Couldn&apos;t find any Program data.
+            </h2>
           </div>
         )}
       </div>

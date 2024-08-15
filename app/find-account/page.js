@@ -1,30 +1,35 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useFindAccountMutation } from "@/lib/feature/auth/authApi";
+import Link from "next/link";
+import SmallLoader from "@/components/SmallLoader";
 
 export default function FindAccount() {
-  // dispatch
-  const dispatch = useDispatch();
+  const [findAccount, { isLoading }] = useFindAccountMutation();
+
   const router = useRouter();
-  const { message, error } = useSelector(getAuthData);
+
   //input
   const [input, setInput] = useState("");
 
   //search  email
   const handleSubmit = async () => {
-    dispatch(findAccount({ email: input }));
+    if (!input) return toast.error("Email is required!.");
+
+    const response = await findAccount({
+      email: input,
+    });
+
+    if (response?.data?.success) {
+      router.push(`/password-reset?email=${input}`);
+      toast.success(response?.data?.message);
+    } else {
+      toast.error(response?.error?.data?.error?.message);
+    }
   };
 
-  useEffect(() => {
-    dispatch(setMessageEmpty());
-    if (message) {
-      toast.success(message);
-      if (message === "User found!") {
-        router.push(`/password-reset?email=${input}`);
-      }
-    }
-    error && toast.error(error);
-  }, [message, error, router, dispatch]);
   return (
     <section className="bg-white dark:bg-[#151f32]  dark:text-[#cacfd5]   py-24 ">
       <div className=" ">
@@ -48,8 +53,8 @@ export default function FindAccount() {
                     Enter Your Email Address
                   </span>
                   <input
-                    type="text"
-                    name="name"
+                    type="email"
+                    name="email"
                     value={input}
                     onChange={(e) => {
                       setInput(e.target.value);
@@ -62,19 +67,17 @@ export default function FindAccount() {
               </div>
             </div>
             <div className="flex content-footer justify-between p-4 text-right">
-              <button
+              <Link
+                href={"/login"}
                 className="z-10 text-[#ffffff] font-bold bg-[#9a7ff0] hover:bg-[#7161eb] dark:bg-[#2320e64d]  focus:outline-none focus:ring-0  rounded-lg text-sm   px-5 py-2.5 text-center"
-                onClick={() => {
-                  navigate("/login");
-                }}
               >
                 CANCEL
-              </button>
+              </Link>
               <button
-                className="z-10 text-[#ffffff] font-bold bg-[#9a7ff0] hover:bg-[#7161eb] dark:bg-[#2420e6d4]  focus:outline-none focus:ring-0  rounded-lg text-sm   px-5 py-2.5 text-center"
+                className="z-10 h-11 flex justify-center items-center  text-[#ffffff] font-bold bg-[#9a7ff0] hover:bg-[#7161eb] dark:bg-[#2420e6d4]  focus:outline-none focus:ring-0  rounded-lg text-sm   px-5 py-2.5 text-center"
                 onClick={handleSubmit}
               >
-                SEARCH
+                {isLoading ? <SmallLoader /> : "SEARCH"}
               </button>
             </div>
           </div>
@@ -84,8 +87,3 @@ export default function FindAccount() {
     </section>
   );
 }
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAuthData, setMessageEmpty } from "../login/slice/authSlice";
-import { findAccount } from "../login/slice/authApiSlice";
-import { toast } from "react-toastify";

@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Fragment, useEffect, useRef, useState } from "react";
 import usePopupControl from "@/hooks/popupControl/usePopupControl";
 import Link from "next/link";
@@ -12,17 +12,21 @@ import {
   useLoggedInUserQuery,
 } from "@/lib/feature/auth/authApi";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import Loading from "@/components/Loading";
 
 // cached disable
 export const dynamic = "force-dynamic";
 
 export default function Header() {
+  const router = useRouter();
+
   const pathname = usePathname();
-  const { user } = useSelector((state) => state.loggedInUser);
-  const { data } = useLoggedInUserQuery();
+  const { data, refetch, currentData, isError, isSuccess } =
+    useLoggedInUserQuery();
+
   const [userLogout] = useAuthLogoutMutation();
+
+  const [user, setUser] = useState(data?.data || null);
+
   // navbar close
   const { isOpen, toggleMenu, dropDownRef } = usePopupControl();
 
@@ -45,22 +49,19 @@ export default function Header() {
   const handleLogout = async () => {
     const payload = await userLogout();
     if (payload?.data?.success) {
+      router.push("/login");
+      setUser(null);
       toast.success("Successfully Logout.");
     } else if (payload?.error?.status === 400) {
       toast.error(payload.error.data.error.message);
     }
   };
 
-  // const router = useRouter();
-
-  // logout message show
-  // useEffect(() => {
-  //   if (message === "Successfully Logout.") {
-  //     toast.success(message);
-  //     dispatch(setMessageEmpty());
-  //     router.push("/login");
-  //   }
-  // }, [message, dispatch, router]);
+  useEffect(() => {
+    if (data?.data) {
+      setUser(data.data);
+    }
+  }, [data]);
 
   const dropDownMenuRef = useRef(null);
 

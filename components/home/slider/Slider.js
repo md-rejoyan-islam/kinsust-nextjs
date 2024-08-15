@@ -14,7 +14,7 @@ import slidersData from "./data";
 const Slider = () => {
   return (
     <section>
-      <div className="max-w-screen-2xl mx-auto overflow-hidden">
+      <div className="max-w-screen-2xl mx-auto overflow-hidden dark:bg-black">
         <Swiper
           className="dark:bg-black/15 bg-white"
           effect={"coverflow"}
@@ -26,7 +26,7 @@ const Slider = () => {
             rotate: 250,
             stretch: 0,
             depth: 100,
-            modifier: 1,
+            modifier: 0,
             slideShadows: true,
           }}
           modules={[Autoplay, Pagination, Navigation]}

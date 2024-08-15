@@ -1,21 +1,24 @@
 "use client";
 import Link from "next/link";
 import PasswordShowHide from "../../components/login/PasswordShowHide";
-import { useAuthLoginMutation } from "@/lib/feature/auth/authApi";
-import { redirect, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import {
+  useAuthLoginMutation,
+  useResendActivationCodeMutation,
+} from "@/lib/feature/auth/authApi";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import SmallLoader from "@/components/SmallLoader";
 
 export default function Login() {
-  const [userLogin] = useAuthLoginMutation();
+  const [userLogin, { isLoading }] = useAuthLoginMutation();
+  const [resendCode] = useResendActivationCodeMutation();
 
-  const { user } = useSelector((state) => state.loggedInUser);
+  const [email, setEmail] = useState("");
+
+  const [accountIsActive, setAccountIsActive] = useState(true);
+
   const router = useRouter();
-
-  // redict to home page if user is already logged in
-  if (user) {
-    redirect(`/profile`);
-    // router.push("/profile");
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,12 +29,35 @@ export default function Login() {
       password: formData.get("password"),
     };
 
-    // const payload = await userLogin(data);
-    // if (payload?.data?.success) {
-    //   toast.success("Login Successfully!");
-    // } else if (payload?.error?.status === 400) {
-    //   toast.error(payload.error.data.error.message);
-    // }
+    const payload = await userLogin(data);
+
+    if (payload?.data?.success) {
+      toast.success("Login Successfully!");
+      router.push("/profile");
+    } else if (!payload?.error?.data?.success) {
+      if (
+        payload.error?.data?.error?.message === "Please active your account."
+      ) {
+        setAccountIsActive(false);
+      }
+
+      toast.error(payload.error.data.error.message);
+    }
+  };
+
+  // handleActiveAccount
+
+  const handleActiveAccount = async () => {
+    const payload = await resendCode({
+      email: email,
+    });
+
+    if (payload?.data?.success) {
+      router.push("/verify?email=" + email);
+      toast.success("Login Successfully!");
+    } else if (!payload?.error?.data?.success) {
+      toast.error(payload.error.data.error.message);
+    }
   };
 
   return (
@@ -59,6 +85,9 @@ export default function Login() {
             <input
               placeholder="Type Your Email Address"
               className=" z-10 rounded-[0px_5px_5px_0px] dark:bg-[#150d36] h-11 px-3 bg-white border text-[17px] text-zinc-600 dark:text-zinc-400 border-zinc-300 dark:border-zinc-600 focus:outline-none  w-full max-full "
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               name="email"
             />
           </div>
@@ -69,8 +98,7 @@ export default function Login() {
             <div className="text-sm flex justify-between">
               <Link
                 className="z-10 block text-[17px] text-red-400 hover:text-red-600 dark:text-red-400"
-                // href={"/find-account"}
-                href={"/#"}
+                href={"/find-account"}
               >
                 Forgot Password?
               </Link>
@@ -82,25 +110,27 @@ export default function Login() {
                 Sign Up
               </Link>
             </div>
-            <div className="mt-4 flex justify-center mb-6  text-zinc-500 dark:text-zinc-300">
-              Active your account ? &nbsp;
-              <Link
-                href={"#"}
-                // href={"/find-account"}
-                className="z-10 text-blue-600 font-semibold dark:text-blue-600 hover:text-violet-600 px-2 "
-              >
-                Click Here
-              </Link>
-            </div>
+            {!accountIsActive && (
+              <div className="mt-4 flex justify-center mb-6  text-zinc-500 dark:text-zinc-300">
+                Active your account ? &nbsp;
+                <button
+                  onClick={handleActiveAccount}
+                  className="z-10 text-blue-600 font-semibold dark:text-blue-600 hover:text-violet-600 px-2 "
+                  type="button"
+                >
+                  Click Here
+                </button>
+              </div>
+            )}
           </div>
 
           <div className=" flex">
             <button
-              className="z-10 py-2 rounded-md text-semibold font-semibold cursor-pointer bg-violet-500 hover:bg-violet-600 text-white border-none dark:bg-violet-600 dark:hover:bg-blue-600  w-full max-full 
+              className="z-10 h-11 flex justify-center items-center  rounded-md text-semibold font-semibold cursor-pointer bg-violet-500 hover:bg-violet-600 text-white border-none dark:bg-violet-600 dark:hover:bg-blue-600  w-full max-full 
                 text-[17px]"
               type="submit"
             >
-              LOGIN
+              {isLoading ? <SmallLoader /> : " LOGIN"}
             </button>
           </div>
         </form>

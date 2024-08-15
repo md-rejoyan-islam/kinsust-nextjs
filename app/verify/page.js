@@ -1,22 +1,22 @@
 "use client";
-import Count from "@/components/count/Count";
-import { useEffect } from "react";
+
 import { useRouter, useSearchParams } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { getAuthData, setMessageEmpty } from "../login/slice/authSlice";
-import { activeAccount, sendActiveCode } from "../login/slice/authApiSlice";
 import { toast } from "react-toastify";
+import {
+  useAccountActivationMutation,
+  useResendActivationCodeMutation,
+} from "@/lib/feature/auth/authApi";
+import useCoutDown from "@/components/useCoutDown";
+import SmallLoader from "@/components/SmallLoader";
 
 export default function Verify() {
-  // dispatch
-  const dispatch = useDispatch();
-  // user , message
-  const { message, error } = useSelector(getAuthData);
-
-  const { count, time, setTime } = Count(290);
-
+  const [accountActivate, { isLoading }] = useAccountActivationMutation();
+  const [resendCode, { isLoading: isResendLoading }] =
+    useResendActivationCodeMutation();
   // search params
   const searchParams = useSearchParams();
+
+  const { value, setValue } = useCoutDown(300);
 
   // navigate
   const router = useRouter();
@@ -46,28 +46,34 @@ export default function Verify() {
     const codeArray = [data.code1, data.code2, data.code3, data.code4];
     const code = codeArray.join("");
 
-    dispatch(activeAccount({ code }));
-    // value reset
-    e.target.reset();
+    if (!code) {
+      return toast.error("Code is required");
+    }
+
+    const response = await accountActivate({ code });
+
+    if (response?.data?.success) {
+      router.push("/login");
+      e.target.reset();
+      toast.success(response?.data?.message);
+    } else {
+      toast.error(response?.error?.data?.error?.message);
+    }
   };
 
   // handle resend code
   const handleResend = async () => {
-    dispatch(sendActiveCode({ email: searchParams.get("email") }));
-    setTime(300);
+    const response = await resendCode({
+      email: searchParams.get("email"),
+    });
+    if (response?.data?.success) {
+      setValue(300);
+      toast.success(response?.data?.message);
+    } else {
+      toast.error(response?.error?.data?.error?.message);
+    }
   };
 
-  // message and error
-  useEffect(() => {
-    if (message) {
-      toast.success(message);
-      if (message === "Successfully activated your account.") {
-        router.push("/login");
-      }
-    }
-    error && toast.error(error);
-    dispatch(setMessageEmpty());
-  }, [message, error, dispatch, router]);
   return (
     <section className="  bg-white py-16  dark:bg-[#151f32]  dark:text-[#cacfd5]">
       <div className=" ">
@@ -81,8 +87,8 @@ export default function Verify() {
             <div className="content-body text-center   text-[#3c4046]  p-4 dark:border-zinc-700 border-zinc-300 dark:text-[#cdd6e2]">
               <p>Four digit security code sent to your Email.</p>
               <p className="pt-2 flex justify-center">
-                {time ? (
-                  <span>Code Expired in : &nbsp; {count}</span>
+                {value ? (
+                  <span>Code Expired in : &nbsp; {value}</span>
                 ) : (
                   <>
                     <span className="text-red-500">Expired!</span>
@@ -121,19 +127,19 @@ export default function Verify() {
                   />
                 </div>
                 <div className="modal-action  pt-3 px-4 text-right">
-                  {!time && (
+                  {!value && (
                     <span
-                      className="flex items-center text-white py-1 px-2 cursor-pointer z-10 rounded-sm bg-blue-600 text-sm"
+                      className="h-11 flex justify-center  items-center text-white py-1 px-2 cursor-pointer z-10 rounded-sm bg-blue-600 text-sm"
                       onClick={handleResend}
                     >
-                      resend code
+                      {isResendLoading ? <SmallLoader /> : "resend code"}
                     </span>
                   )}
                   <button
                     type="submit"
-                    className="py-[6px] px-3 hover:bg-[#1068f5] rounded-md   z-10 text-white bg-[#0c51d2] "
+                    className="h-11 flex justify-center items-center  px-3 hover:bg-[#1068f5] rounded-md   z-10 text-white bg-[#0c51d2] "
                   >
-                    Submit
+                    {isLoading ? <SmallLoader /> : "SUBMIT"}
                   </button>
                 </div>
               </form>

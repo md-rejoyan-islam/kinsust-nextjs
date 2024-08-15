@@ -21,15 +21,16 @@ export default async function Advisors() {
           {advisors?.map((advisor, index) => (
             <AdvisorCard advisor={advisor} key={index} index={index} />
           ))}
+
+          {/* if advisors is empty */}
+          {!advisors?.length && (
+            <div>
+              <h2 className=" text-center md:mt-5 mt-3 mb-5 text-[#fc535a] xl:text-4xl lg:text-3xl  sm:text-2xl text-xl font-bold">
+                Couldn&apos;t find any Advisor data.
+              </h2>
+            </div>
+          )}
         </div>
-
-        {/* if advisors is empty */}
-
-        {advisors?.length === 0 && (
-          <div className="flex justify-center items-center">
-            <p>No Advisors Found</p>
-          </div>
-        )}
       </section>
     </section>
   );

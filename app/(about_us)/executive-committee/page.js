@@ -71,5 +71,15 @@ export default function ExecutiveCommittee() {
         </div>
       </section>
     );
+  } else {
+    return (
+      <section className=" min-h-screen  theme-dark bg-[#fff] md:text-[20px] text-18px  py-10 text-black ">
+        <div className="   mx-auto xl:w-[1200px] lg:px-12 md:px-28 px-4">
+          <h1 className=" text-center md:mt-5 mt-3 mb-5 text-[#fc535a] xl:text-4xl lg:text-3xl  sm:text-2xl text-xl font-bold">
+            Couldn&apos;t find any Executive Commitee Data
+          </h1>
+        </div>
+      </section>
+    );
   }
 }

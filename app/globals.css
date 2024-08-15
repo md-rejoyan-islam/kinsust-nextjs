@@ -2,13 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  height: max-content !important;
-  background-color: #fff;
+@media (prefers-color-scheme: light) {
+  :root {
+    background-color: #fff !important;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    background-color: #111827;
+  }
 }
 
-.dark body {
-  background-color: #111827 !important;
+.glowable-text {
+  color: black;
+}
+
+[glow] .glowable-text {
+  color: var(--glow-color);
 }
 
 @font-face {

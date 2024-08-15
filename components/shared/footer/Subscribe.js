@@ -29,6 +29,7 @@ export default function Subscribe() {
 
     if (payload?.data?.success) {
       toast.success("Subscribed Successfully!");
+      e.target.reset();
     } else if (payload?.error?.status === 400) {
       toast.error(payload.error.data.error.message);
     }

@@ -34,7 +34,7 @@ function ProgramCard({ program, title, index }) {
         damping: 20,
         delay: index * 0.1,
       }}
-      className="card card-compact border  border-[rgb(229,231,235)]  bg-[#fff]   rounded-md  dark:bg-[#142036] max-w-full mx-auto  shadow-lg dark:shadow-none dark:border-[#172d49] "
+      className="card card-compact border  border-[rgb(229,231,235)]  bg-[#fff]   rounded-md  dark:bg-[#182c496b] max-w-full mx-auto  shadow-lg dark:shadow-none dark:border-[#172d49] "
       ref={viewRef}
     >
       <div className="box text-red-600"></div>

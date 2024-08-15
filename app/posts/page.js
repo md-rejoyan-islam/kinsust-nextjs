@@ -5,6 +5,7 @@ import Pagination from "../../components/pagination/Pagination";
 import Loading from "@/components/Loading";
 import { useCallback, useEffect, useState } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { GlowCapture } from "@codaworks/react-glow";
 
 export default function Posts() {
   const [page, setPage] = useState(1);
@@ -37,24 +38,26 @@ export default function Posts() {
 
   return (
     <section className=" bg-[#fcf9fe]    theme-dark    min-h-screen overflow-hidden">
-      <main className=" xl:w-[1200px] py-10 px-5 lg:m-auto ">
-        <div className=" space-y-10">
-          {blogs?.map((post, index) => (
-            <PostCard post={post} key={post.id} index={index} />
-          ))}
-        </div>
+      <main className=" xl:w-[1200px]  lg:m-auto ">
+        <GlowCapture className="py-10 px-5">
+          <div className=" space-y-2">
+            {blogs?.map((post, index) => (
+              <PostCard post={post} key={post.id} index={index} />
+            ))}
+          </div>
+        </GlowCapture>
 
         {/* if no data found  */}
-        {blogs.length === 0 && (
+        {blogs?.length === 0 && (
           <div>
-            <h1 className="text-center px-4 text-black dark:text-white">
-              No Data Found!
-            </h1>
+            <h2 className=" text-center md:mt-5 mt-3 mb-5 text-[#fc535a] xl:text-4xl lg:text-3xl  sm:text-2xl text-xl font-bold">
+              Couldn&apos;t find any Post data.
+            </h2>
           </div>
         )}
 
         {/* pagination show  */}
-        {blogs.length > 0 && (
+        {blogs?.length > 0 && (
           <div className="pt-8 pb-2">
             <Pagination
               page={page}
@@ -63,17 +66,6 @@ export default function Posts() {
             />
           </div>
         )}
-
-        {/* pagination */}
-        {/* {blogs.length > 0 ? (
-            <Pagination pagination={pagination} data={getAllBlogs} />
-          ) : (
-            <div>
-              <h1 className="text-center px-4 text-black dark:text-white">
-                No Data Found!
-              </h1>
-            </div>
-          )} */}
       </main>
     </section>
   );

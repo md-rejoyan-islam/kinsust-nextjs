@@ -1,44 +1,51 @@
 import { useEffect } from "react";
-
-// import "react-image-crop/dist/ReactCrop.css";
-
-import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
-import swal from "sweetalert";
-import ApiURL from "@/components/api/Api";
-import { getAuthData, setMessageEmpty } from "../../login/slice/authSlice";
-import { updateUserPhoto } from "../../login/slice/authApiSlice";
+import Swal from "sweetalert2";
 import Image from "next/image";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import {
+  useLoggedInUserQuery,
+  useUpdateUserPasswordMutation,
+  useUpdateUserPhotoMutation,
+} from "@/lib/feature/auth/authApi";
+
+const ApiURL = process.env.SERVER_URL;
 
 const PhotoChange = () => {
-  // dispatch
-  const dispatch = useDispatch();
-  // user
-  const { user, message, error } = useSelector(getAuthData);
+  const [updatePhoto] = useUpdateUserPhotoMutation();
+  const { data: { data: user = {} } = {} } = useLoggedInUserQuery();
+
+  const { isError, error } = {};
 
   // photo change
   const handlePhotoChange = (e) => {
     const photo = e.target.files[0];
     const photoSize = photo.size / 1000;
     if (photoSize > 400) {
-      return swal("", "File size must not exceed 400 KB", "warning");
+      return Swal.fire({
+        title: "Error!",
+        text: "File size must not exceed 400 KB",
+        icon: "warning",
+        confirmButtonText: "Cool",
+      });
     }
-    swal({
+
+    Swal.fire({
       title: "Are you sure?",
       text: "You want to change your profile picture!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    }).then((willUpload) => {
-      if (willUpload) {
+    }).then((result) => {
+      if (result.isConfirmed) {
         const formData = new FormData();
         formData.append("user_photo", photo);
-        formData.append("userId", user._id);
+        formData.append("userId", user.id);
 
-        dispatch(updateUserPhoto(formData));
-        swal("Poof! Your profile has been change ", {
+        updatePhoto(formData);
+
+        Swal.fire({
+          title: `Your profile has been change`,
           icon: "success",
         });
       }
@@ -46,9 +53,8 @@ const PhotoChange = () => {
   };
 
   useEffect(() => {
-    error && toast.error(error);
-    dispatch(setMessageEmpty());
-  }, [message, error, dispatch]);
+    isError && toast.error("e");
+  }, [isError, error]);
 
   return (
     <>
@@ -65,7 +71,7 @@ const PhotoChange = () => {
                     src={`${ApiURL}/public/images/users/${user?.user_photo}`}
                     width={300}
                     height={300}
-                    alt={user?.name}
+                    alt={user?.name || "Rejoyan Islam"}
                     placeholder="blur"
                     blurDataURL="/images/blur/blur.webp"
                     loading="lazy"
@@ -76,14 +82,13 @@ const PhotoChange = () => {
             </span>
           </figure>
 
-          <label className=" text-[14px]  bg-violet-600 text-white p-3 rounded-sm cursor-pointer">
-            {" "}
+          <label className=" text-[14px]  bg-violet-600 text-white px-2 py-1 rounded-sm cursor-pointer">
             <input
               type="file"
               onChange={handlePhotoChange}
               className="hidden"
             />{" "}
-            Upload photo{" "}
+            Upload photo
           </label>
         </div>
       </span>

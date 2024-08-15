@@ -83,19 +83,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       {/* <!-- Google tag (gtag.js) --> */}
-      {/* <head>
+      <head>
         <Script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-586W9N9C79"
+          src="https://www.googletagmanager.com/gtag/js?id=G-JWPF6NH2QT"
         ></Script>
         <Script id="google-analytics">
-          {` window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-586W9N9C79');`}
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JWPF6NH2QT')
+            `}
         </Script>
-      </head> */}
+      </head>
       <body className={hindSiliguri.className}>
         <ThemeWrapperProvider>
           <StoreProvider>
@@ -105,8 +106,8 @@ export default function RootLayout({ children }) {
             <Toastify />
           </StoreProvider>
         </ThemeWrapperProvider>
-        <GoogleTagManager gtmId="GTM-KJXX4NGM" />
-        <GoogleAnalytics gaId="G-586W9N9C79" />
+        {/* <GoogleTagManager gtmId="GTM-KJXX4NGM" />
+        <GoogleAnalytics gaId="G-586W9N9C79" /> */}
       </body>
     </html>
   );

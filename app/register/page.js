@@ -1,11 +1,16 @@
 "use client";
+import SmallLoader from "@/components/SmallLoader";
+import { useAuthRegisterMutation } from "@/lib/feature/auth/authApi";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
 function Register() {
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
+
+  const [userRegister, { isLoading }] = useAuthRegisterMutation();
 
   const [inputs, setInputs] = useState({
     name: "",
@@ -21,6 +26,8 @@ function Register() {
       [e.target.name]: e.target.value,
     }));
   };
+
+  const router = useRouter();
 
   // form submit
   const handleSubmit = async (e) => {
@@ -41,7 +48,19 @@ function Register() {
       return toast.error("Password not match.");
     }
 
-    // dispatch(userRegister(inputs));
+    const response = await userRegister({
+      name,
+      email,
+      password,
+      gender,
+    });
+
+    if (response?.data?.success) {
+      router.push("/verify?email=" + inputs.email);
+      toast.success(response?.data?.message);
+    } else {
+      toast.error(response?.error?.data?.error?.message);
+    }
   };
   return (
     <section className="bg-[#fff] py-24 dark:bg-[#0b192a]    dark:text-white px-4 ">
@@ -240,11 +259,12 @@ function Register() {
             </Link>
           </div>
           <div className="mb-6 flex">
-            <input
+            <button
               type="submit"
-              className="z-10 border-none py-2 rounded-md text-[17px] font-semibold  w-full dark:bg-violet-600 text-white bg-violet-500 hover:bg-violet-600 dark:hover:bg-violet-700 cursor-pointer"
-              value={"SIGN UP"}
-            />
+              className="z-10 border-none h-11 flex justify-center items-center  rounded-md text-[17px] font-semibold  w-full dark:bg-violet-600 text-white bg-violet-500 hover:bg-violet-600 dark:hover:bg-violet-700 cursor-pointer"
+            >
+              {isLoading ? <SmallLoader /> : "SIGN UP"}
+            </button>
           </div>
         </form>
       </div>

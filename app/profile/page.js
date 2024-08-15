@@ -2,18 +2,18 @@
 import { toast } from "react-toastify";
 import { useState } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useSelector } from "react-redux";
 import Loading from "@/components/Loading";
+import PhotoChange from "./Components/PhotoChange";
+import {
+  useLoggedInUserQuery,
+  useUpdateUserDataMutation,
+} from "@/lib/feature/auth/authApi";
+import EditProfile from "./Components/EditProfile";
 
 export default function Profile() {
-  // const { blogs } = useSelector((state) => state.blogs);
-  const { user } = useSelector((state) => state.loggedInUser);
+  const { data: { data: user = {} } = {} } = useLoggedInUserQuery();
 
-  if (!user) {
-    redirect(`/login`);
-    // router.push("/login");
-  }
+  const [updatePassword] = useUpdateUserDataMutation();
 
   // password show
   const [show, setShow] = useState(false);
@@ -31,11 +31,6 @@ export default function Profile() {
       [e.target.name]: e.target.value,
     }));
   };
-
-  // dispatch
-  // const dispatch = useDispatch();
-  // // message and error
-  // const { message, error, user } = useSelector(getAuthData);
 
   // password change submit
   const handlePasswordChangeSubmit = async (e) => {
@@ -56,42 +51,42 @@ export default function Profile() {
       toast.error("Password not match");
       return false;
     }
+    const response = await updatePassword({
+      id: user.id,
+      password: inputs.password,
+    });
 
-    dispatch(updateUserPassword({ password: inputs.password }));
+    if (response?.data?.success) {
+      document.getElementById("passwordChange").click();
+      setInputs({
+        password: "",
+        con_password: "",
+      });
+      toast.success(response?.data?.message);
+    } else {
+      toast.error(response?.error?.data?.error?.message);
+    }
   };
 
-  if (!user) {
+  if (!user.id) {
     return <Loading />;
   }
-
-  // error or message show
-  // useEffect(() => {
-  //   if (message == "Password updated successfully.") {
-  //     document.getElementById("passwordChange").click();
-  //     setInputs({ password: "", con_password: "" });
-  //     toast.success(message);
-  //   }
-  //   if (error) {
-  //     toast.error(error);
-  //   }
-  //   dispatch(setMessageEmpty());
-  // }, [error, message, dispatch]);
 
   return (
     <section className=" bg-[#fff]   px-5 m-auto text-justify  text-[17px] py-10  theme-dark">
       <div className="lg:w-2/3 w-full mx-auto rounded-md bg-[#f2f5f9] dark:bg-[#172944] py-10 px-5">
         <div className="photo relative px-3 ">
           <div className="header sm:flex justify-between items-end  ">
-            {/* <PhotoChange />  */}
+            <PhotoChange />
 
-            <div className="space-x-2 sm:pt-0 pt-4 sm:block flex-wrap gap-3 flex justify-between items-center">
+            <div className=" sm:pt-0 pt-4 text-[14px]  gap-3 flex justify-between items-center">
               <span
-                className="cursor-pointer bg-blue-500 gap-1 hover:bg-violet-500 inline-flex items-center py-2 rounded-md px-4 mt-2"
+                className="cursor-pointer text-[14px] text-white  bg-blue-500 gap-2 hover:bg-violet-500 flex items-center py-1 rounded-md px-3 "
                 onClick={() => {
                   document.getElementById("passwordChange").click();
                 }}
               >
-                <span className="text-white sm:text-[16px] text-[13px]">
+                <span className=" sm:text-[14px] text-[13px]">
                   <svg
                     stroke="currentColor"
                     fill="currentColor"
@@ -104,11 +99,11 @@ export default function Profile() {
                   >
                     <path d="M0 168v-16c0-13.255 10.745-24 24-24h360V80c0-21.367 25.899-32.042 40.971-16.971l80 80c9.372 9.373 9.372 24.569 0 33.941l-80 80C409.956 271.982 384 261.456 384 240v-48H24c-13.255 0-24-10.745-24-24zm488 152H128v-48c0-21.314-25.862-32.08-40.971-16.971l-80 80c-9.372 9.373-9.372 24.569 0 33.941l80 80C102.057 463.997 128 453.437 128 432v-48h360c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24z"></path>
                   </svg>
-                  Password Change
                 </span>
+                <span>Password Change</span>
               </span>
               {/* edit profile */}
-              {/* <EditProfile /> */}
+              <EditProfile user={user} />
             </div>
           </div>
         </div>{" "}
@@ -124,7 +119,7 @@ export default function Profile() {
                     type="text"
                     className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4 "
                     disabled
-                    value={user?.name}
+                    value={user?.name || ""}
                   />
                 </div>
               </div>
@@ -135,7 +130,7 @@ export default function Profile() {
                     type="text"
                     className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
                     disabled
-                    value={user?.email}
+                    value={user?.email || ""}
                   />
                 </div>
               </div>
@@ -149,7 +144,7 @@ export default function Profile() {
                     type="text"
                     className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
                     disabled
-                    value={user?.mobile}
+                    value={user?.mobile || ""}
                   />
                 </div>
               </div>
@@ -163,7 +158,7 @@ export default function Profile() {
                     type="text"
                     className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
                     disabled
-                    value={user?.blood_group ? user?.blood_group : "null"}
+                    value={user?.blood_group ? user?.blood_group : ""}
                   />
                 </div>
               </div>
@@ -175,7 +170,7 @@ export default function Profile() {
                     type="text"
                     className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
                     disabled
-                    value={user?.location ? user?.location : "null"}
+                    value={user?.location ? user?.location : ""}
                   />
                 </div>
               </div>
@@ -187,7 +182,7 @@ export default function Profile() {
                     type="text"
                     className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
                     disabled
-                    value={user?.gender}
+                    value={user?.gender || ""}
                   />
                 </div>
               </div>
@@ -199,10 +194,65 @@ export default function Profile() {
                     type="text"
                     className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
                     disabled
-                    value={user?.age ? user?.age : "null"}
+                    value={user?.age ? user?.age : ""}
                   />
                 </div>
               </div>
+
+              {/* if sustian  */}
+              {user?.is_sustian && (
+                <>
+                  <div className="">
+                    <div className="space-y-1">
+                      <label className="font-semibold">Session:</label>
+                      <input
+                        type="text"
+                        className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
+                        disabled
+                        value={user?.session ? user?.session : ""}
+                      />
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="space-y-1">
+                      <label className="font-semibold">Department:</label>
+                      <input
+                        type="text"
+                        className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
+                        disabled
+                        value={user?.department ? user?.department : ""}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+              {/* if not sustian  */}
+              {!user?.is_sustian && (
+                <>
+                  <div className="">
+                    <div className="space-y-1">
+                      <label className="font-semibold">Profession:</label>
+                      <input
+                        type="text"
+                        className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
+                        disabled
+                        value={user?.profession || ""}
+                      />
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="space-y-1">
+                      <label className="font-semibold">Organization:</label>
+                      <input
+                        type="text"
+                        className="bg-white dark:bg-[#110b2a] w-full py-2 rounded-md px-4"
+                        disabled
+                        value={user?.organization || ""}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
 
               {/* <div className="">
                 <div className="space-y-1">
@@ -222,7 +272,7 @@ export default function Profile() {
                   <label className="font-semibold">Feedback:</label>
                   <textarea
                     disabled
-                    value={user?.feedback ? user?.feedback : "null"}
+                    value={user?.feedback ? user?.feedback : ""}
                     className="bg-white dark:bg-[#110b2a] w-full p-4 rounded-md"
                   />
                 </div>
@@ -233,10 +283,10 @@ export default function Profile() {
                     Social Link:
                   </label>
                   <div className="flex gap-10 items-center">
-                    {user?.social_media?.fb && (
+                    {user?.fb_url && (
                       <Link
                         className="z-10"
-                        href={user.social_media.fb}
+                        href={user?.fb_url}
                         target="_blank"
                       >
                         <svg
@@ -253,10 +303,10 @@ export default function Profile() {
                         </svg>
                       </Link>
                     )}
-                    {user?.social_media?.instagram && (
+                    {user?.instagram_url && (
                       <Link
                         className="z-10"
-                        href={user.social_media.fb}
+                        href={user?.instagram_url}
                         target="_blank"
                       >
                         <svg
@@ -273,10 +323,10 @@ export default function Profile() {
                         </svg>
                       </Link>
                     )}
-                    {user?.social_media?.linkedIn && (
+                    {user?.linkedIn_url && (
                       <Link
                         className="z-10"
-                        href={user.social_media.linkedIn}
+                        href={user?.linkedIn_url}
                         target="_blank"
                       >
                         <svg
@@ -356,7 +406,7 @@ export default function Profile() {
                       <svg
                         stroke="currentColor"
                         fill="currentColor"
-                        stroke-width="0"
+                        strokeWidth="0"
                         viewBox="0 0 512 512"
                         height="1em"
                         width="1em"
@@ -400,7 +450,7 @@ export default function Profile() {
                       <svg
                         stroke="currentColor"
                         fill="currentColor"
-                        stroke-width="0"
+                        strokeWidth="0"
                         viewBox="0 0 512 512"
                         height="1em"
                         width="1em"
@@ -412,7 +462,7 @@ export default function Profile() {
                       <svg
                         stroke="currentColor"
                         fill="currentColor"
-                        stroke-width="0"
+                        strokeWidth="0"
                         viewBox="0 0 16 16"
                         height="1em"
                         width="1em"
