@@ -7,17 +7,23 @@ import { allBlogs, singleBlog } from "../api";
 const ApiURL = process.env.SERVER_URL;
 
 // for of static generation
-export async function generateStaticParams() {
-  const blogs = await allBlogs();
+// export async function generateStaticParams() {
+//   const blogs = await allBlogs();
 
-  return blogs?.map((post) => ({
-    slug: post.slug,
-  }));
-}
+//   if (!blogs?.length) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+
+//   return blogs?.map((post) => ({
+//     slug: post?.slug,
+//   }));
+// }
 // end for of static generation
 
 export default async function GetSinglePost({ params }) {
-  const blog = await singleBlog(params.slug);
+  const blog = await singleBlog(params?.slug);
   const blogs = await allBlogs();
 
   return (
