@@ -12,6 +12,7 @@ import {
   useLoggedInUserQuery,
 } from "@/lib/feature/auth/authApi";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 // cached disable
 export const dynamic = "force-dynamic";
@@ -50,6 +51,7 @@ export default function Header() {
     const payload = await userLogout();
     if (payload?.data?.success) {
       router.push("/login");
+      Cookies.remove("accessToken");
       setUser(null);
       toast.success("Successfully Logout.");
     } else if (payload?.error?.status === 400) {

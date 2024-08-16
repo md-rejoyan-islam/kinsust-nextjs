@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import SmallLoader from "@/components/SmallLoader";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [userLogin, { isLoading }] = useAuthLoginMutation();
@@ -33,6 +34,9 @@ export default function Login() {
 
     if (payload?.data?.success) {
       toast.success("Login Successfully!");
+      Cookies.set("accessToken", payload?.data?.data.accessToken, {
+        expires: 365,
+      });
       router.push("/profile");
     } else if (!payload?.error?.data?.success) {
       if (
