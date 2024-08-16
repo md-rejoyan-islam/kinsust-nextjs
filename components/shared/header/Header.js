@@ -14,8 +14,8 @@ import {
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
-// cached disable
-export const dynamic = "force-dynamic";
+// // cached disable
+// export const dynamic = "force-dynamic";
 
 export default function Header() {
   const router = useRouter();

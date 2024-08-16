@@ -1,9 +1,10 @@
-import { allAdvisors } from "./api";
-import AdvisorCard from "../../../components/cards/AdvisorCard";
+"use client";
 
-export default async function Advisors() {
-  // advisors data
-  const { data: advisors } = await allAdvisors();
+import AdvisorCard from "../../../components/cards/AdvisorCard";
+import { useAdvisorsQuery } from "@/lib/feature/advisor/advisorApi";
+
+export default function Advisors() {
+  const { data: { data: advisors = [] } = {} } = useAdvisorsQuery();
 
   return (
     <section className="bg-[#fff]  py-5   text-black  bg-no-repeat   theme-dark  h-full px-4">
