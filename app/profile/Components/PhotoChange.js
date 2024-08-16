@@ -37,7 +37,7 @@ const PhotoChange = () => {
       buttons: true,
       dangerMode: true,
     }).then((result) => {
-      if (result.isConfirmed) {
+      if (result?.isConfirmed) {
         const formData = new FormData();
         formData.append("user_photo", photo);
         formData.append("userId", user.id);
