@@ -49,7 +49,6 @@ function ThemeToggle() {
           id="theme-toggle-dark-icon"
           stroke="currentColor"
           onClick={() => {
-            console.log(22);
             setTheme("light");
           }}
         >

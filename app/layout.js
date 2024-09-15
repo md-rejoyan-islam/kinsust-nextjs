@@ -7,7 +7,6 @@ import StoreProvider from "./StoreProvider";
 import Header from "../components/shared/header/Header";
 import ThemeWrapperProvider from "./ThemeProvider";
 import Toastify from "@/components/Toastify";
-import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
 
 const hindSiliguri = Hind_Siliguri({
@@ -18,7 +17,7 @@ const hindSiliguri = Hind_Siliguri({
 export const metadata = {
   metadataBase: new URL(process.env.SITE_URL),
   title: "Home",
-  description: "KIN,A Voluntary Organization",
+  description: `KIN, initiated by SUST students in 2003 with the motto "আত্মার কাছে দায়বদ্ধতায় হাতে রাখি হাত," is committed to uplifting the community. Through KIN School, blood donation, charity, warmth, and awareness initiatives, we aim to create a brighter tomorrow.`,
   keywords: "kinsust, kin ,kin school,kin blood donation, sust",
   url: process.env.SITE_URL,
   image: "/images/logo.webp",
@@ -47,7 +46,7 @@ export const metadata = {
 
   twitter: {
     title: "KIN,A Voluntary Organization",
-    description: "KIN,A Voluntary Organization",
+    description: `KIN, initiated by SUST students in 2003 with the motto "আত্মার কাছে দায়বদ্ধতায় হাতে রাখি হাত," is committed to uplifting the community. Through KIN School, blood donation, charity, warmth, and awareness initiatives, we aim to create a brighter tomorrow.`,
     images: {
       url: "/images/logo.webp",
       alt: "KIN Logo",
@@ -56,7 +55,7 @@ export const metadata = {
 
   openGraph: {
     title: "KIN,A Voluntary Organization",
-    description: "KIN,A Voluntary Organization",
+    description: `KIN, initiated by SUST students in 2003 with the motto "আত্মার কাছে দায়বদ্ধতায় হাতে রাখি হাত," is committed to uplifting the community. Through KIN School, blood donation, charity, warmth, and awareness initiatives, we aim to create a brighter tomorrow.`,
     url: "https://kinbd.org",
     type: "website",
     siteName: "KIN,A Voluntary Organization",

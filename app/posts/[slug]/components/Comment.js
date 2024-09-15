@@ -54,7 +54,7 @@ export default function Comment({ slug }) {
       toast.error(payload.error.data.error.message);
     }
   };
-  console.log(blog);
+
   return (
     <div className="bg-[#858ac524] dark:bg-[#202c4976] lg:py-8 py-6 rounded-md text-left ">
       <div className=" md:w-2/3 px-4 md:px-0 mx-auto">
